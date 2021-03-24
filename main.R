@@ -16,17 +16,21 @@ removeBalises<-function(t){
 }
 
 nettoyage1<-function(corpus){
-  corpus<-tm_map(corpus,merge)
-  corpus<-tm_map(corpus,content_transformer(tolower))
-  corpus<-tm_map(corpus,removeScript)
-  corpus<-tm_map(corpus,removeBalises)
+  Vcorpus<-tm_map(corpus,merge)
+  Vcorpus<-tm_map(corpus,content_transformer(tolower))
+  Vcorpus<-tm_map(corpus,removeScript)
+  Vcorpus<-tm_map(corpus,removeBalises)
 }
 
 nettoyage2<-function(corpus)
 {
-  corpus<-tm_map(corpus,tolower)
-  corpus<-tm_map(corpus,removeWords,words=stopwords('fr'))
-  corpus<-tm_map(corpus,removeNumbers)
-  corpus<-tm_map(corpus,removePunctuation)
-  corpus<-tm_map(corpus,stemDocument,language='fr')
+  Vcorpus<-tm_map(corpus,removeWords,words=stopwords('en'))
+  Vcorpus<-tm_map(corpus,removeNumbers)
+  Vcorpus<-tm_map(corpus,removePunctuation)
+  Vcorpus<-tm_map(corpus,stemDocument,language='en')
 }
+
+train<-VCorpus(DirSource("training",recursive=TRUE))
+trainN<-nettoyage1(train)
+trainN
+trainN<-nettoyage2(trainN)
