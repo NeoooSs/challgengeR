@@ -25,8 +25,8 @@ nettoyage1<-function(corpus){
 nettoyage2<-function(corpus)
 {
   corpus<-tm_map(corpus,tolower)
-  corpus<-tm_map(corpus,removeWords,words=stopwords('fr'))
+  corpus<-tm_map(corpus,removeWords,words=stopwords('en'))
   corpus<-tm_map(corpus,removeNumbers)
   corpus<-tm_map(corpus,removePunctuation)
-  corpus<-tm_map(corpus,stemDocument,language='fr')
+  corpus<-tm_map(corpus,stemDocument,language='en')
 }
