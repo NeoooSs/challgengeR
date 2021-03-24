@@ -34,3 +34,11 @@ train<-VCorpus(DirSource("training",recursive=TRUE))
 trainN<-nettoyage1(train)
 trainN
 trainN<-nettoyage2(trainN)
+mat<-DocumentTermMatrix(trainN)
+
+vocab<-findFreqTerms(mat,lowfreq=200)
+vec<-sapply(1:50,function(i)length(findFreqTerms(mat,lowfreq=i)))
+mat20<-DocumentTermMatrix(trainN,control=list(dictionary=vocab))
+M<-as.matrix(mat20)
+classes<-c(rep(0,5),rep(1,5),rep(2,5))
+M<-cbind(M,classes)
