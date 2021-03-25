@@ -26,11 +26,26 @@ mrPropre<-function(corpus){
   corpus<-tm_map(corpus,stemDocument,language='en')
 }
 
-erreur_kppv <- function(k,data){
-  predictions <- vapply(seq_len(nrow)) function(i){
-    classerKPPV(data[i, -ncol(data)], k, data[-i,])
-  }, numeric(1L)
-  sum(predictions != data[, ncol(data)])
+dist_voisins=function(vecteur,data){
+  apply(data[,-ncol(data)],1,distance,x=vecteur)
+}
+
+kppv=function(vecteur,k,data){
+  dist=dist_voisins(vecteur,data)
+  order(dist)[1:k]
+}
+
+classerKPPV=function(vecteur, k, data) {
+  v=kppv(vecteur,k,data)
+  classes=data[v,ncol(data)]
+  t=table(classes)
+  names(t)[which.max(t)]
+}
+
+erreurKPPV<-function(k,data){
+  pred<-sapply(1:nrow(data),function(i)classerKPPV(data[i,-ncol(data)],k,data[-i]))
+  classes<-data[,ncol(data)]
+  return(1-sum(pred==classes)/nrow(data))
 }
 
 
@@ -43,7 +58,7 @@ mat200<-DocumentTermMatrix(trainN,control=list(dictionary=vocab))
 M<-as.matrix(mat200)
 classes<-c(rep(0,150),rep(1,150),rep(2,150),rep(3,150),rep(4,150),rep(5,150),rep(6,150))
 M<-cbind(M,classes)
-M<-erreur_kppv(1050,M)
+M<-erreurKPPV(1050,M)
 
 #classer<-function(fic){
   #corpus<-Vcorpus(URISource(fic))
