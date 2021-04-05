@@ -26,6 +26,10 @@ mrPropre<-function(corpus){
   corpus<-tm_map(corpus,stemDocument,language='en')
 }
 
+distance<-function(x,y){
+  return(sqrt(sum((as.numeric(x)-as.numeric(y))^2)))
+}
+
 dist_voisins=function(vecteur,data){
   apply(data[,-ncol(data)],1,distance,x=vecteur)
 }
@@ -58,7 +62,7 @@ mat200<-DocumentTermMatrix(trainN,control=list(dictionary=vocab))
 M<-as.matrix(mat200)
 classes<-c(rep(0,150),rep(1,150),rep(2,150),rep(3,150),rep(4,150),rep(5,150),rep(6,150))
 M<-cbind(M,classes)
-M<-erreurKPPV(1050,M)
+erreurKPPV(1050,M)
 
 #classer<-function(fic){
   #corpus<-Vcorpus(URISource(fic))
