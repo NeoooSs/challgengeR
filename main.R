@@ -55,7 +55,7 @@ train=VCorpus(DirSource("training",recursive=TRUE))
 trainN=mrPropre(train)
 mat=DocumentTermMatrix(trainN)
 
-vocab=findFreqTerms(mat,lowfreq=200)
+vocab=findFreqTerms(mat,lowfreq=250)
 mat200=DocumentTermMatrix(trainN,control=list(dictionary=vocab))
 M=as.matrix(mat200)
 classes=c(rep(0,150),rep(1,150),rep(2,150),rep(3,150),rep(4,150),rep(5,150),rep(6,150))
@@ -65,7 +65,7 @@ erreurKPPV(5,M)
 allClasses<-c("accueil", "blog", "commerce", "FAQ", "home", "liste", "recherche")
 
 classer=function(fic){
-  corpus=Vcorpus(URISource(fic))
+  corpus=VCorpus(URISource(fic))
   corpusN=mrPropre(corpus)
   matrix=as.matrix(DocumentTermMatrix(corpusN,list(dictionary=vocab)))
   res=classerKPPV(vecteur,k,fic)
