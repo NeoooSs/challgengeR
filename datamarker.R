@@ -58,10 +58,22 @@ mat<-DocumentTermMatrix(corpusN)
 vocab=findFreqTerms(mat,lowfreq=250)
 mat200=DocumentTermMatrix(trainN,control=list(dictionary=vocab))
 M=as.matrix(mat200)
-classes<-c(rep(0,150),rep(1,150),rep(2,150),rep(3,150),rep(4,150),rep(5,150),rep(6,150))
+classes<-c(rep('accueil',150),rep('blog',150),rep('commerce',150),rep('FAQ',150),rep('home',150),rep('liste',150),rep('recherche',150))
 M<-cbind(M,classes)
+
+write.csv(M,'data.csv')
+
 
 classer <- function(fic) {
   mat <- as.matrix(DocumentTermMatrix(mrPropre(VCorpus(URISource(fic))), list(dictionary=vocab)))
   return (classerKPPV(mat, 4, data))
 }
+
+classer=function(fic){
+  corpus=VCorpus(URISource(fic))
+  corpusN=mrPropre(corpus)
+  matrix=as.matrix(DocumentTermMatrix(corpusN,list(dictionary=vocab)))
+  return (classerKPPV(mat,3,fic))
+}
+
+
