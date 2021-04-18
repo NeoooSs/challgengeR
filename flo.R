@@ -51,23 +51,17 @@ erreurKPPV=function(k, data) {
   return (1-sum((pred==(data[,ncol(data)]))/nrow(data)))
 }
 
-train=VCorpus(DirSource("training",recursive=TRUE))
-trainN=mrPropre(train)
-mat=DocumentTermMatrix(trainN)
 
-vocab=findFreqTerms(mat,lowfreq=250)
-mat200=DocumentTermMatrix(trainN,control=list(dictionary=vocab))
-M=as.matrix(mat200)
-classes=c(rep("FAQ",150),rep("accueil",150),rep("blog",150),rep("commerce",150),rep("home",150),rep("liste",150),rep("recherche",150))
-M=cbind(M,classes)
-write.csv(M,'data.csv')
+corpusN<-mrPropre(VCorpus(DirSource("training",recursive=TRUE)))
+mat<-DocumentTermMatrix(corpusN)
+vocab1<-findFreqTerms(mat, lowfreq=400, highfreq=1300)
+vocab2<-findFreqTerms(mat, lowfreq = 100, highfreq = 150)
+vocab<-c(vocab1, vocab2)
+mat20<-DocumentTermMatrix(corpusN, list(dictionary=vocab))
+M<-as.matrix(mat20)
+M<-cbind(M,c(rep("accueil",150),rep("blog",150),rep("commerce",150),rep("FAQ",150),rep("home",150),rep("liste",150),rep("recherche",150)))
 
-
-classer=function(fic){
-  corpus=VCorpus(URISource(fic))
-  corpusN=mrPropre(corpus)
-  matrix=as.matrix(DocumentTermMatrix(corpusN,list(dictionary=vocab)))
-  return (classerKPPV(vecteur,3,fic))
+classer <- function(fic) {
+  mat <- as.matrix(DocumentTermMatrix(mrPropre(VCorpus(URISource(fic))), list(dictionary=vocab)))
+  return (classerKPPV(mat, 4, data))
 }
-
-
