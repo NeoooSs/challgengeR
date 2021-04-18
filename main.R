@@ -31,12 +31,12 @@ distance=function(x,y){
 }
 
 dist_voisins=function(vecteur,data){
-  apply(data[,-ncol(data)],1,distance,x=vecteur)
+  return(apply(data[,-ncol(data)],1,distance,x=vecteur))
 }
 
 kppv=function(vecteur,k,data){
   dist=dist_voisins(vecteur,data)
-  order(dist)[1:k]
+  return(order(dist)[1:k])
 }
 
 classerKPPV=function(vecteur, k, data) {
@@ -46,8 +46,8 @@ classerKPPV=function(vecteur, k, data) {
   return (names(t)[which.max(t)])
 }
 
-erreurKPPV<-function(k, data) {
-  pred<-sapply(1:nrow(data), function(i)classerKPPV(data[i,-ncol(data)],k,data[-i,]))
+erreurKPPV=function(k, data) {
+  pred=sapply(1:nrow(data), function(i)classerKPPV(data[i,-ncol(data)],k,data[-i,]))
   return (1-sum((pred==(data[,ncol(data)]))/nrow(data)))
 }
 
@@ -60,7 +60,7 @@ mat200=DocumentTermMatrix(trainN,control=list(dictionary=vocab))
 M=as.matrix(mat200)
 classes=c(rep(0,150),rep(1,150),rep(2,150),rep(3,150),rep(4,150),rep(5,150),rep(6,150))
 M=cbind(M,classes)
-erreurKPPV(5,M)
+erreurKPPV(3,M)
 
 allClasses<-c("accueil", "blog", "commerce", "FAQ", "home", "liste", "recherche")
 
